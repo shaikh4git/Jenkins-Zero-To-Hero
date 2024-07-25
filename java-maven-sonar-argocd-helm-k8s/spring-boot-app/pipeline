@@ -7,8 +7,17 @@ pipeline {
             image 'shaikhdocker/maven-shaikh-docker-agent:v1'
             args '--user root -v /var/run/docker.sock:/var/run/docker.sock' // Mount Docker socket
         }
+
     }
     stages {
+        stage('Debug Docker') {
+
+            steps {
+              sh 'which docker || echo "Docker not found"'
+            sh 'docker --version'
+            }
+        }
+
         stage('Shaikh Checkout') {
             steps {
                 sh 'echo passed'
@@ -44,8 +53,8 @@ pipeline {
                     
                     // Log in to Docker registry and push the image
                     sh '''
-                        ${DOCKER_PATH} login -u "${DOCKER_USERNAME}" -p "${DOCKER_PASSWORD}"
-                        ${DOCKER_PATH} push ${DOCKER_IMAGE}
+                        ${env.DOCKER_PATH} login -u "${DOCKER_USERNAME}" -p "${DOCKER_PASSWORD}"
+                        ${env.DOCKER_PATH} push ${DOCKER_IMAGE}
                     '''
                 }
             }
