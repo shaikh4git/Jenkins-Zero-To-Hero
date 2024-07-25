@@ -1,81 +1,16 @@
 pipeline {
-    environment {
-        DOCKER_PATH = '/usr/local/bin/docker' // Adjust this path as necessary
-    }
     agent {
         docker {
             image 'shaikhdocker/maven-shaikh-docker-agent:v1'
-            args '--user root -v /var/run/docker.sock:/var/run/docker.sock' // Mount Docker socket
+            args '--user root -v /var/run/docker.sock:/var/run/docker.sock'
         }
-
     }
     stages {
         stage('Debug Docker') {
-
             steps {
-              sh 'which docker || echo "Docker not found"'
-            sh 'docker --version'
-            }
-        }
-
-        stage('Shaikh Checkout') {
-            steps {
-                sh 'echo passed'
-               
-            }
-        }
-        stage('Shaikh 2 Build and Test') {
-            steps {
-                sh 'ls -ltr'
-                // Build the project and create a JAR file
-                sh 'cd java-maven-sonar-argocd-helm-k8s/spring-boot-app && mvn clean package'
-            }
-        }
-        stage('Shaikh3 Static Code Analysis') {
-            environment {
-                SONAR_URL = "http://localhost:9000"
-            }
-            steps {
-                withCredentials([string(credentialsId: 'sonarqube', variable: 'SONAR_AUTH_TOKEN')]) {
-                    sh 'cd java-maven-sonar-argocd-helm-k8s/spring-boot-app && mvn sonar:sonar -Dsonar.login=$SONAR_AUTH_TOKEN -Dsonar.host.url=${SONAR_URL}'
-                }
-            }
-        }
-        stage('Shaikh4 Build and Push Docker Image') {
-            environment {
-                DOCKER_IMAGE = "shaikhdocker/ultimate-cicd:${BUILD_NUMBER}"
-                REGISTRY_CREDENTIALS = credentials('docker-cred')
-            }
-            steps {
-                script {
-                    // Build Docker image
-                    sh 'cd java-maven-sonar-argocd-helm-k8s/spring-boot-app && docker build -t ${DOCKER_IMAGE} .'
-                    
-                    // Log in to Docker registry and push the image
-                    sh '''
-                        ${env.DOCKER_PATH} login -u "${DOCKER_USERNAME}" -p "${DOCKER_PASSWORD}"
-                        ${env.DOCKER_PATH} push ${DOCKER_IMAGE}
-                    '''
-                }
-            }
-        }
-        stage('Shaikh5 Update Deployment File') {
-            environment {
-                GIT_REPO_NAME = "Jenkins-Zero-To-Hero"
-                GIT_USER_NAME = "shaikh4git"
-            }
-            steps {
-                withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
-                    sh '''
-                        git config user.email "shaikh4huda@gmail.com"
-                        git config user.name "Shaikh Shamsul"
-                        BUILD_NUMBER=${BUILD_NUMBER}
-                        sed -i "s/replaceImageTag/${BUILD_NUMBER}/g" java-maven-sonar-argocd-helm-k8s/spring-boot-app-manifests/deployment.yml
-                        git add java-maven-sonar-argocd-helm-k8s/spring-boot-app-manifests/deployment.yml
-                        git commit -m "Update deployment image to version ${BUILD_NUMBER}"
-                        git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
-                    '''
-                }
+                sh 'which docker || echo "Docker not found"'
+                sh 'docker --version || echo "Docker version not available"'
+                sh 'ls -l /var/run/docker.sock'
             }
         }
     }
