@@ -6,8 +6,10 @@ pipeline {
         stage('Setup Docker') {
             steps {
                 script {
+                    // Ensure Docker is in the PATH
+                    sh 'echo $PATH'
                     // Pull the Docker image if not already available
-                    sh 'docker pull node:20.16.0-alpine3.20'
+                    //sh 'docker pull node:20.16.0-alpine3.20'
                 }
             }
         }
