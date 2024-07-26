@@ -3,13 +3,28 @@ pipeline {
         label 'laptop'
     }
     stages {
-        stage('Test Docker') {
+        stage('Setup Docker') {
+            steps {
+                script {
+                    // Pull the Docker image if not already available
+                    sh 'docker pull node:20.16.0-alpine3.20'
+                }
+            }
+        }
+        stage('Run in Docker') {
+            agent {
+                docker {
+                    image 'node:20.16.0-alpine3.20'
+                    args '-v /var/run/docker.sock:/var/run/docker.sock' // Bind Docker socket
+                    reuseNode true // Optional: reuse the node context for better performance
+                }
+            }
             steps {
                 script {
                     // Check Docker version to ensure Docker is working
                     sh 'docker --version'
                     
-                    // Check node version to ensure the correct Docker image is used
+                    // Check Node version to ensure the correct Docker image is used
                     sh 'node --version'
                 }
             }
