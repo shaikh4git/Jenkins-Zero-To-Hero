@@ -6,7 +6,7 @@ pipeline {
     }
     
     agent {
-        {$env.DOCKER_PATH} { 
+        { 
             image 'node:20.16.0-alpine3.20' 
             args '-v /var/run/docker.sock:/var/run/docker.sock' // Ensure Docker daemon can be accessed
         }
