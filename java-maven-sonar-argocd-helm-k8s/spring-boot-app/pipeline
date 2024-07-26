@@ -18,7 +18,7 @@ pipeline {
                 docker {
                     image 'node:20.16.0-alpine3.20'
                     args '-v /var/run/docker.sock:/var/run/docker.sock' // Bind Docker socket
-                    reuseNode true // Optional: reuse the node context for better performance
+                    //reuseNode true // Optional: reuse the node context for better performance
                 }
             }
             steps {
