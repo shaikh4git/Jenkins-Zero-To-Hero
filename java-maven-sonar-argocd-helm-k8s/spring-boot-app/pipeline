@@ -14,13 +14,7 @@ pipeline {
             }
         }
         stage('Run in Docker') {
-            agent {
-                docker {
-                    image 'node:20.16.0-alpine3.20'
-                    args '-v /var/run/docker.sock:/var/run/docker.sock' // Bind Docker socket
-                    //reuseNode true // Optional: reuse the node context for better performance
-                }
-            }
+
             steps {
                 script {
                     // Check Docker version to ensure Docker is working
