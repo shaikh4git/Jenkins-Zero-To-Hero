@@ -1,9 +1,11 @@
 # Use a base image with OpenJDK 11 installed
-FROM adoptopenjdk/openjdk11:jre-11.0.11_9-alpine
+FROM openjdk:11-jre-slim
 
 # Install Maven and procps (for the top command)
-RUN apk update && \
-    apk add --no-cache maven procps
+RUN apt-get update && \
+    apt-get install -y maven procps && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 # Set the working directory
 WORKDIR /opt/app
@@ -15,5 +17,4 @@ COPY ${artifact} app.jar
 # Run the application
 ENTRYPOINT ["java", "-jar", "app.jar"]
 
-# Keep the container running
-CMD ["tail", "-f", "/dev/null"]
+#
