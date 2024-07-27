@@ -15,9 +15,10 @@ pipeline {
             GIT_REPO_NAME = "Jenkins-Zero-To-Hero"
             GIT_USER_NAME = "shaikh4git"
         }
-        steps {
-            withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
-                sh '''
+        steps{
+            withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]){
+                 sh '''
+
                     git config user.email "shaikh4huda@gmail.com"
                     git config user.name "Shaikh Shamsul"
                     BUILD_NUMBER=${BUILD_NUMBER}
@@ -27,7 +28,10 @@ pipeline {
                     git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
                 '''
             }
+
         }
-    }
-  }
+
+
+
+            
 }
