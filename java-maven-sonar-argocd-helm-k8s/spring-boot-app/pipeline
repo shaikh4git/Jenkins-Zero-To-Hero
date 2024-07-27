@@ -12,12 +12,12 @@ pipeline {
         stage('Shaikh Update Deployment File'){
             environment {
                 GIT_REPO_NAME = "Jenkins-Zero-To-Hero"
-                GIT_USER_NAME = "iam-veeramalla"
+                GIT_USER_NAME = "shaikh4git"
             }
             steps{
                 withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]){
                     sh '''
-                    
+
                     /usr/bin/git config user.email "shaikh4huda@gmail.com"
                     /usr/bin/git config user.name "Shaikh Shamsul"
                     BUILD_NUMBER=${BUILD_NUMBER}
