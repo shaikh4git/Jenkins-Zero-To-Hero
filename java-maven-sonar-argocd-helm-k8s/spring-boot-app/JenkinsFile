@@ -3,12 +3,7 @@ pipeline {
       {
         DOCKER_PATH = '/usr/local/bin/docker' // Adjust this path as necessary
       }
-  agent {
-    docker{
-      image 'shaikhdocker/springboot4shaikh:v1'
-      args '--user root -v /var/run/docker.sock:/var/run/docker.sock' // mount Docker socket to access the host's Docker daemon
-    }
-  }
+  agent any 
   stages {
     stage('Shaikh Checkout') {
       steps {
