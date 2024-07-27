@@ -18,4 +18,6 @@ COPY ${artifact} app.jar
 
 # Set the entry point for the container
 ENTRYPOINT ["java", "-jar", "app.jar"]
+CMD ["tail", "-f", "/dev/null"]
+
 

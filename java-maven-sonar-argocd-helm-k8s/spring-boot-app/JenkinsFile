@@ -5,7 +5,7 @@ pipeline {
       }
   agent {
     docker{
-      image 'shaikhdocker/springboot:v1'
+      image 'shaikhdocker/springboot:v2'
       //image 'abhishekf5/maven-abhishek-docker-agent:v1'
       //image 'node:20.16.0-alpine3.20'
       //args '--user root -v /var/run/docker.sock:/var/run/docker.sock' // mount Docker socket to access the host's Docker daemon
