@@ -1,29 +1,18 @@
 pipeline {
-    agent {
-        label 'laptop'
+  environment 
+      {
+        DOCKER_PATH = '/usr/local/bin/docker' // Adjust this path as necessary
+      }
+  agent {
+    docker{
+      image 'shaikhdocker/maven-shaikh-docker-agent:v1'
+      args '--user root -v /var/run/docker.sock:/var/run/docker.sock' // mount Docker socket to access the host's Docker daemon
     }
-    stages {
-        stage('Setup Docker') {
-            steps {
-                script {
-                    // Ensure Docker is in the PATH
-                    sh 'echo $PATH'
-                    // Pull the Docker image if not already available
-                    //sh 'docker pull node:20.16.0-alpine3.20'
-                }
-            }
-        }
-        stage('Run in Docker') {
-
-            steps {
-                script {
-                    // Check Docker version to ensure Docker is working
-                    sh 'docker --version'
-                    
-                    // Check Node version to ensure the correct Docker image is used
-                    sh 'node --version'
-                }
-            }
-        }
+  }
+  stages {
+    stage('Shaikh Checkout') {
+      steps {
+        sh 'echo passed'
+        //git branch: 'main', url: 'https://github.com/iam-veeramalla/Jenkins-Zero-To-Hero.git'
+      }
     }
-}
